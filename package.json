@@ -37,6 +37,7 @@
     "karma-viewport": "^1.0.6"
   },
   "dependencies": {
+    "minimist": "^1.2.5",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3"
   }
