@@ -4,5 +4,11 @@
  * @returns {{min:number, max:number}}  объект
  */
 function getMinMax(str) {
-  // ваш код...
+  let result = {};
+  str = str.split(/\s|,/);
+  let newNumber = str.filter(num => +num);
+  newNumber = newNumber.sort((a, b) => a - b);
+  result.max = +newNumber.pop();
+  result.min = +newNumber.shift();
+  return result;
 }
