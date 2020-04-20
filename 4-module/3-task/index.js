@@ -3,8 +3,6 @@
  * @param {Element} table
  */
 
-let table = document.querySelector('.js-teachers');
-
 function highlight(table) {
     let tr;
     for (let i = 1; i < table.rows.length; i++) {
