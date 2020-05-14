@@ -20,15 +20,6 @@
 
     let productGrid = new ProductGrid(products);
 
-    let filters = {
-  noNuts: true, // true/false
-  vegeterianOnly: false, // true/false
-  maxSpiciness: 3, // числа от 0 до 4
-  category: 'soups', // уникальный идентификатор категории товара
-};
-
-productGrid.updateFilter(filters); 
-
     container.append(productGrid.elem);
 
   </script>
