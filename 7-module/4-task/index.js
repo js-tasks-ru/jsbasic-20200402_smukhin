@@ -21,6 +21,7 @@ export default class StepSlider {
   }
 
   onPointerDown = (event) => {
+    event.preventDefault();
     document.addEventListener('pointermove', this.moveOn);
     document.addEventListener('pointerup', this.onPointerUp);
     this.elem.ondragstart = () => false;
@@ -51,7 +52,7 @@ export default class StepSlider {
     this.changeValue(value);
     this.changeSliderStepClass(value);
   }
-  clickOn = (event) => {
+  clickOn(event) {
     let sliderProgress = this.elem.querySelector('.slider__progress');
     let sliderThumb = this.elem.querySelector('.slider__thumb');
 
@@ -86,12 +87,12 @@ export default class StepSlider {
     this.onPointerUp = null;
   }
 
-  changeValue(value) {
-    this.value = value; 
+  changeValue(param) {
+    this.value = param; 
     let sliderValue = this.elem.querySelector('.slider__value');
     sliderValue.innerHTML = this.value;
   }
-  changeSliderStepClass(value) {
+  changeSliderStepClass(param) {
     
     let sliderSteps = this.elem.querySelector('.slider__steps');
     let spans = sliderSteps.querySelectorAll('span');
@@ -100,7 +101,7 @@ export default class StepSlider {
       span.classList.remove('slider__step-active');
     }
 
-    spans[value].classList.add('slider__step-active');
+    spans[param].classList.add('slider__step-active');
   }
   changeValueEvent() {
     let event = new CustomEvent('slider-change', {
