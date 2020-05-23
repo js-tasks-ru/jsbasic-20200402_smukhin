@@ -19,7 +19,7 @@ export default class Cart {
     };
 
     let cart = this.cartItems.find((item) => item.product.id === product.id);
-    if (cart == undefined) {
+    if (cart === undefined) {
       this.cartItems.push(cartItem);
     }
 
@@ -139,7 +139,7 @@ export default class Cart {
 
   onProductUpdate(cartItem) {
     this.cartIcon.update(this);
-    if (document.body.classList.contains('is-modal-open')) {
+    if (document.body.classList.contains('is-modal-open') && this.modal) {
       let productId = cartItem.product.id;
       let modalBody = this.productCards;
       let productCount = modalBody.querySelector(`[data-product-id="${productId}"] .cart-counter__count`);
@@ -162,7 +162,6 @@ export default class Cart {
 
   onSubmit(event) {
     event.preventDefault();
-    // console.log(this.cartItems);
 
     let url = "https://httpbin.org/post";
 
@@ -171,13 +170,11 @@ export default class Cart {
 
     let formData = new FormData(event.target);
 
-    async function fetchSubmit() {
-      let response = await fetch(url, {
-        method: 'POST',
-        body: formData
-      });
-    }
-    fetchSubmit().then((res) => {
+    fetch(url, {
+      method: 'POST',
+      body: formData
+    })
+    .then((res) => {
       this.modal.setTitle('Success!');
       this.cartItems = [];
       this.cartIcon.update(this);
