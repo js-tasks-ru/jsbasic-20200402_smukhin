@@ -18,7 +18,6 @@ export default class Cart {
 
     if (cart !== undefined) {
       cart.count = cart.count + 1;
-      cart.product.price += cart.product.price;
     }
 
     this.onProductUpdate(cartItem);
@@ -26,18 +25,16 @@ export default class Cart {
 
   updateProductCount(productId, amount) {
     let cartItem = this.cartItems.find((item) => item.product.id === productId);
-    let priceCartItem = cartItem.product.price / cartItem.count;
 
     if (amount === -1) {
       cartItem.count = cartItem.count - 1;
-      cartItem.product.price -= priceCartItem;
     }
     if (amount === 1) {
       cartItem.count = cartItem.count + 1;
-      cartItem.product.price += priceCartItem;
     }
     if (cartItem.count === 0) {
-      this.cartItems.splice(cartItem);
+      let index = this.cartItems.indexOf(cartItem);
+      this.cartItems.splice(index, 1);
     }
     this.onProductUpdate(cartItem);
   }
@@ -58,7 +55,7 @@ export default class Cart {
 
   getTotalPrice() {
     let total = 0;
-    this.cartItems.map((item) => total += item.product.price);
+    this.cartItems.map((item) => total += item.product.price * item.count);
     return total;
   }
 
