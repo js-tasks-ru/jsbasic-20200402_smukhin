@@ -13,7 +13,7 @@ export default class RibbonMenu {
     let buttonLeft = `<button class='ribbon__arrow ribbon__arrow_left'><img src ="/assets/images/icons/angle-icon.svg"></button>`;
     let buttonRight = `<button class='ribbon__arrow ribbon__arrow_right ribbon__arrow_visible'><img src ="/assets/images/icons/angle-icon.svg"></button>`;
     let ribbonItem = '';
-    for(let category of categories) {
+    for (let category of categories) {
       ribbonItem += `<a href="#" class='ribbon__item' data-id='${category.id}'>${category.name}</a>`; 
     }
     let ribbonInner = `${buttonLeft}<nav class='ribbon__inner'>${ribbonItem}</nav>${buttonRight}`;
@@ -21,11 +21,11 @@ export default class RibbonMenu {
   }
 
   selectionCategory(event) {
+    event.preventDefault();
     if (event.target.classList.contains('ribbon__item')) {
-      event.preventDefault();
 
       let items = event.target.closest('.ribbon__inner').querySelectorAll('.ribbon__item');
-      for(let item of items) {
+      for (let item of items) {
         item.classList.remove('ribbon__item_active');
       }
 
@@ -59,9 +59,9 @@ export default class RibbonMenu {
     function scrollCategory(event) {
       if (event.target.closest('.ribbon__arrow')) {
         let target = event.target.closest('.ribbon__arrow');
-         target.classList.contains('ribbon__arrow_left') ?
-           ribbonInner.scrollBy(-350, 0) : ribbonInner.scrollBy(350, 0);
-         }
+        target.classList.contains('ribbon__arrow_left') ?
+        ribbonInner.scrollBy(-350, 0) : ribbonInner.scrollBy(350, 0);
+        }
     };
   }
 }

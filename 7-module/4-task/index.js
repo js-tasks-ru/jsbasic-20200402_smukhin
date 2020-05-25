@@ -22,8 +22,8 @@ export default class StepSlider {
 
   onPointerDown = (event) => {
     event.preventDefault();
-    document.addEventListener('pointermove', this.moveOn);
-    document.addEventListener('pointerup', this.onPointerUp);
+    event.target.closest('.container').addEventListener('pointermove', this.moveOn);
+    event.target.closest('.container').addEventListener('pointerup', this.onPointerUp);
     this.elem.ondragstart = () => false;
   }
 
@@ -52,7 +52,36 @@ export default class StepSlider {
     this.changeValue(value);
     this.changeSliderStepClass(value);
   }
-  clickOn(event) {
+  // clickOn(event) {
+
+  //   let sliderProgress = this.elem.querySelector('.slider__progress');
+  //   let sliderThumb = this.elem.querySelector('.slider__thumb');
+
+  //   let sizeSteps = 100 / (this.steps - 1);
+
+  //   let leftPercents = ((event.clientX - this.elem.getBoundingClientRect().left) * 100) / this.elem.offsetWidth;
+  //   let value = Math.round(leftPercents / sizeSteps);
+  //   let percentStep = value / (this.steps - 1) * 100;
+
+  //   if (value > (this.steps - 1)) {
+  //     value = this.steps - 1;
+  //   }
+  //   if (value < 0) {
+  //     value = 0;
+  //   }
+
+  //   if (percentStep <= 100 && percentStep >= 0) {
+  //     sliderProgress.style.width = `${percentStep}%`;
+  //     sliderThumb.style.left = `${percentStep}%`;
+  //   }
+
+  //   this.changeValue(value);
+  //   this.changeSliderStepClass(value);
+  // }
+
+  onPointerUp = (event) => {
+
+
     let sliderProgress = this.elem.querySelector('.slider__progress');
     let sliderThumb = this.elem.querySelector('.slider__thumb');
 
@@ -76,12 +105,8 @@ export default class StepSlider {
 
     this.changeValue(value);
     this.changeSliderStepClass(value);
-  }
 
-  onPointerUp = (event) => {
-    this.clickOn(event);
-
-    document.removeEventListener('pointermove', this.moveOn);
+    event.target.closest('.container').removeEventListener('pointermove', this.moveOn);
     this.elem.classList.remove('slider_dragging');
     this.changeValueEvent();
     this.onPointerUp = null;
