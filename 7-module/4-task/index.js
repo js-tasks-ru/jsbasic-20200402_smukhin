@@ -2,7 +2,9 @@ export default class StepSlider {
   constructor({ steps, value = 0 }) {
     this.steps = steps;
     this.value = value;
+    this.segments = steps - 1;
     this.render(steps);
+    this.changeValueStatic(value);
     this.elem.addEventListener('pointerdown', this.onPointerDown);
     this.elem.addEventListener('click', this.onPointerUp);
   }
@@ -22,8 +24,8 @@ export default class StepSlider {
 
   onPointerDown = (event) => {
     event.preventDefault();
-    event.target.closest('.container').addEventListener('pointermove', this.moveOn);
-    event.target.closest('.container').addEventListener('pointerup', this.onPointerUp);
+    this.elem.addEventListener('pointermove', this.moveOn);
+    this.elem.addEventListener('pointerup', this.onPointerUp);
     this.elem.ondragstart = () => false;
   }
 
@@ -52,35 +54,7 @@ export default class StepSlider {
     this.changeValue(value);
     this.changeSliderStepClass(value);
   }
-  // clickOn(event) {
-
-  //   let sliderProgress = this.elem.querySelector('.slider__progress');
-  //   let sliderThumb = this.elem.querySelector('.slider__thumb');
-
-  //   let sizeSteps = 100 / (this.steps - 1);
-
-  //   let leftPercents = ((event.clientX - this.elem.getBoundingClientRect().left) * 100) / this.elem.offsetWidth;
-  //   let value = Math.round(leftPercents / sizeSteps);
-  //   let percentStep = value / (this.steps - 1) * 100;
-
-  //   if (value > (this.steps - 1)) {
-  //     value = this.steps - 1;
-  //   }
-  //   if (value < 0) {
-  //     value = 0;
-  //   }
-
-  //   if (percentStep <= 100 && percentStep >= 0) {
-  //     sliderProgress.style.width = `${percentStep}%`;
-  //     sliderThumb.style.left = `${percentStep}%`;
-  //   }
-
-  //   this.changeValue(value);
-  //   this.changeSliderStepClass(value);
-  // }
-
-  onPointerUp = (event) => {
-
+  clickOn(event) {
 
     let sliderProgress = this.elem.querySelector('.slider__progress');
     let sliderThumb = this.elem.querySelector('.slider__thumb');
@@ -105,13 +79,39 @@ export default class StepSlider {
 
     this.changeValue(value);
     this.changeSliderStepClass(value);
+  }
 
-    event.target.closest('.container').removeEventListener('pointermove', this.moveOn);
+  onPointerUp = (event) => {
+    this.clickOn(event);
+
+    this.elem.removeEventListener('pointermove', this.moveOn);
     this.elem.classList.remove('slider_dragging');
     this.changeValueEvent();
     this.onPointerUp = null;
   }
 
+  changeValueStatic(param) {
+    this.value = param; 
+    let sliderValue = this.elem.querySelector('.slider__value');
+    sliderValue.innerHTML = this.value;
+    let sliderProgress = this.elem.querySelector('.slider__progress');
+    let sliderThumb = this.elem.querySelector('.slider__thumb');
+
+    let percentStep = (param / this.segments) * 100;
+
+
+    sliderProgress.style.width = `${percentStep}%`;
+    sliderThumb.style.left = `${percentStep}%`;
+
+    let sliderSteps = this.elem.querySelector('.slider__steps');
+    let spans = sliderSteps.querySelectorAll('span');
+
+    for (let span of spans) {
+      span.classList.remove('slider__step-active');
+    }
+
+    spans[param].classList.add('slider__step-active');
+  }
   changeValue(param) {
     this.value = param; 
     let sliderValue = this.elem.querySelector('.slider__value');

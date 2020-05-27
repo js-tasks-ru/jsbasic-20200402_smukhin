@@ -55,7 +55,8 @@ export default class Main {
     });
 
     document.body.addEventListener('product-add', (event) => {
-      this.cart.addProduct(event.detail);
+      let item = this.productsGrid.products.find((item) => item.id === event.detail);
+      this.cart.addProduct(item);
     });
 
     this.stepSlider.elem.addEventListener('slider-change', (event) => {

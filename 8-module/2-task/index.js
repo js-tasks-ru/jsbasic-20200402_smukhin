@@ -12,48 +12,35 @@ export default class ProductGrid {
     this.elem.classList.add('products-grid');
     this.elem.innerHTML = `<div class="products-grid__inner"></div>`;
     this.grid = this.elem.querySelector('.products-grid__inner');
-    this.addProduct(produc);  
+
+    for (let product of this.products) {
+      this.addProductTo(product);
+    }  
 
   }
   updateFilter(filters) {
 
-    this.filters = filters;
+    Object.assign(this.filters, filters);
     this.grid.innerHTML = '';
-
-    let productCart = [];
-
-    if (filters.noNuts === true) {
-      productCart = (this.products.filter((item) => !item.nuts === true));
-      this.addProduct(productCart);
-    }
-    if (filters.noNuts === false) {
-      productCart = (this.products.filter((item) => !item.nuts === false));
-      this.addProduct(productCart);
-    }
-
-    if (filters.vegeterianOnly === true) {
-      productCart = (this.products.filter((item) => item.vegeterian === true));
-      this.addProduct(productCart);
-    }
-    if (filters.vegeterianOnly === false) {
-      productCart = (this.products.filter((item) => item.vegeterian === false));
-      this.addProduct(productCart);
-    }
-
-    if (filters.maxSpiciness >= 0 && filters.maxSpiciness <= 4) {
-      productCart = (this.products.filter((item) => item.spiciness <= filters.maxSpiciness));
-      this.addProduct(productCart);
-    }
-
-    if (filters.category) {
-      productCart = (this.products.filter((item) => item.category === filters.category));
-      this.addProduct(productCart);
+    this.onFilters();
+  }
+  onFilters() {
+    for (let product of this.products) {
+      switch (true) {
+      case this.filters.noNuts && product.nuts:
+        break;
+      case this.filters.vegeterianOnly && !product.vegeterian:
+        break;
+      case this.filters.maxSpiciness !== undefined && product.spiciness > this.filters.maxSpiciness:
+        break;
+      case this.filters.category && product.category != this.filters.category:
+        break;
+      default: this.addProductTo(product);
+      }
     }
   }
-  addProduct(product) {
-    product.forEach(element => {
-      let productCard = new ProductCard(element);
-      this.grid.append(productCard.elem);
-    });
+  addProductTo(product) {
+    let productCard = new ProductCard(product);
+    this.grid.append(productCard.elem);
   }
 }
