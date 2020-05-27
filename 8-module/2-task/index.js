@@ -7,34 +7,40 @@ export default class ProductGrid {
     this.filters = {};
     this.render(this.products);
   }
-  render(products) {
+  render(produc) {
     this.elem = document.createElement('div');
     this.elem.classList.add('products-grid');
     this.elem.innerHTML = `<div class="products-grid__inner"></div>`;
     this.grid = this.elem.querySelector('.products-grid__inner');
 
-    this.products.map(product => {
-      let productCard = new ProductCard(product);
-      this.grid.append(productCard.elem);
-    });
+    for (let product of this.products) {
+      this.addProductTo(product);
+    }  
+
   }
   updateFilter(filters) {
 
-    if (filters.noNuts === true) {
-      this.products = this.products.filter(item => !item.nuts === filters.noNuts);
-      this.render(this.products);
+    Object.assign(this.filters, filters);
+    this.grid.innerHTML = '';
+    this.onFilters();
+  }
+  onFilters() {
+    for (let product of this.products) {
+      switch (true) {
+      case this.filters.noNuts && product.nuts:
+        break;
+      case this.filters.vegeterianOnly && !product.vegeterian:
+        break;
+      case this.filters.maxSpiciness !== undefined && product.spiciness > this.filters.maxSpiciness:
+        break;
+      case this.filters.category && product.category != this.filters.category:
+        break;
+      default: this.addProductTo(product);
+      }
     }
-    if (filters.category) {
-      this.products = this.products.filter(item => item.category === filters.category);
-      this.render(this.products);
-    }
-    if (filters.maxSpiciness) {
-      this.products = this.products.filter(item => item.spiciness <= filters.maxSpiciness);
-      this.render(this.products);
-    }
-    if (filters.vegeterianOnly === true) {
-      this.products = this.products.filter(item => item.vegeterian === filters.vegeterianOnly);
-      this.render(this.products);
-    }
+  }
+  addProductTo(product) {
+    let productCard = new ProductCard(product);
+    this.grid.append(productCard.elem);
   }
 }

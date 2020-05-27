@@ -12,7 +12,7 @@ export default class ProductCard {
 
   addCard(event) {
     if (event.target.closest('.card__button')){
-      let eventCustom = new CustomEvent("product-add", {
+      let eventCustom = new CustomEvent('product-add', {
         detail: this.product.id,
         bubbles: true
     });

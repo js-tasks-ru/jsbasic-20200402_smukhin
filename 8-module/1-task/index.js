@@ -48,7 +48,7 @@ export default class CartIcon {
     let rightCoordinate = Math.min(
       coordinateContainer + 20,
       documentWidth - 10
-    )
+    );
 
     if (cart.y <= 0 && document.documentElement.clientWidth >= 767) {
       this.elem.style.cssText = `

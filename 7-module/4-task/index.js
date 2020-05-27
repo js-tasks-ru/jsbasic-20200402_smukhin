@@ -2,7 +2,9 @@ export default class StepSlider {
   constructor({ steps, value = 0 }) {
     this.steps = steps;
     this.value = value;
+    this.segments = steps - 1;
     this.render(steps);
+    this.changeValueStatic(value);
     this.elem.addEventListener('pointerdown', this.onPointerDown);
     this.elem.addEventListener('click', this.onPointerUp);
   }
@@ -22,8 +24,8 @@ export default class StepSlider {
 
   onPointerDown = (event) => {
     event.preventDefault();
-    document.addEventListener('pointermove', this.moveOn);
-    document.addEventListener('pointerup', this.onPointerUp);
+    this.elem.addEventListener('pointermove', this.moveOn);
+    this.elem.addEventListener('pointerup', this.onPointerUp);
     this.elem.ondragstart = () => false;
   }
 
@@ -53,6 +55,7 @@ export default class StepSlider {
     this.changeSliderStepClass(value);
   }
   clickOn(event) {
+
     let sliderProgress = this.elem.querySelector('.slider__progress');
     let sliderThumb = this.elem.querySelector('.slider__thumb');
 
@@ -81,12 +84,34 @@ export default class StepSlider {
   onPointerUp = (event) => {
     this.clickOn(event);
 
-    document.removeEventListener('pointermove', this.moveOn);
+    this.elem.removeEventListener('pointermove', this.moveOn);
     this.elem.classList.remove('slider_dragging');
     this.changeValueEvent();
     this.onPointerUp = null;
   }
 
+  changeValueStatic(param) {
+    this.value = param; 
+    let sliderValue = this.elem.querySelector('.slider__value');
+    sliderValue.innerHTML = this.value;
+    let sliderProgress = this.elem.querySelector('.slider__progress');
+    let sliderThumb = this.elem.querySelector('.slider__thumb');
+
+    let percentStep = (param / this.segments) * 100;
+
+
+    sliderProgress.style.width = `${percentStep}%`;
+    sliderThumb.style.left = `${percentStep}%`;
+
+    let sliderSteps = this.elem.querySelector('.slider__steps');
+    let spans = sliderSteps.querySelectorAll('span');
+
+    for (let span of spans) {
+      span.classList.remove('slider__step-active');
+    }
+
+    spans[param].classList.add('slider__step-active');
+  }
   changeValue(param) {
     this.value = param; 
     let sliderValue = this.elem.querySelector('.slider__value');
